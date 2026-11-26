@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stddef.h>
+#include <string.h>
 
 extern void *maybe_load_vulkan(void);
 
@@ -23,6 +24,10 @@ extern void *maybe_load_vulkan(void);
 VTH_VK_EXPORT VKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL
 vkGetInstanceProcAddr(VkInstance instance, const char *name) {
     if (name == NULL) return NULL;
+    /* Preserve loader identity when a client asks for the loader entry point. */
+    if (strcmp(name, "vkGetInstanceProcAddr") == 0) {
+        return (PFN_vkVoidFunction)vkGetInstanceProcAddr;
+    }
     void *driver = maybe_load_vulkan();
     if (driver == NULL) {
         fprintf(stderr, "Vulkanthyst: selected Vulkan loader is unavailable\n");
