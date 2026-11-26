@@ -25,13 +25,13 @@ vkGetInstanceProcAddr(VkInstance instance, const char *name) {
     if (name == NULL) return NULL;
     void *driver = maybe_load_vulkan();
     if (driver == NULL) {
-        fprintf(stderr, "Vulkanthyst: selected Vulkan loader is unavailable\\n");
+        fprintf(stderr, "Vulkanthyst: selected Vulkan loader is unavailable\n");
         return NULL;
     }
     PFN_vkGetInstanceProcAddr real_gipa =
         (PFN_vkGetInstanceProcAddr)dlsym(driver, "vkGetInstanceProcAddr");
     if (real_gipa == NULL) {
-        fprintf(stderr, "Vulkanthyst: vkGetInstanceProcAddr missing: %s\\n", dlerror());
+        fprintf(stderr, "Vulkanthyst: vkGetInstanceProcAddr missing: %s\n", dlerror());
         return NULL;
     }
     return real_gipa(instance, name);
@@ -53,22 +53,22 @@ VTH_VK_EXPORT void *pojav_get_vulkan_shim_handle(void) {
         if (length > 0 && (size_t)length < sizeof(path)) {
             handle = dlopen(path, RTLD_NOW | RTLD_LOCAL);
             if (handle == NULL) {
-                fprintf(stderr, "Vulkanthyst: dlopen(%s) failed: %s\\n", path, dlerror());
+                fprintf(stderr, "Vulkanthyst: dlopen(%s) failed: %s\n", path, dlerror());
             }
         }
     }
     if (handle == NULL) handle = dlopen("libpojavexec.so", RTLD_NOW | RTLD_LOCAL);
     if (handle == NULL) {
-        fprintf(stderr, "Vulkanthyst: cannot open libpojavexec.so: %s\\n", dlerror());
+        fprintf(stderr, "Vulkanthyst: cannot open libpojavexec.so: %s\n", dlerror());
         return NULL;
     }
 
     void *gipa = dlsym(handle, "vkGetInstanceProcAddr");
     if (gipa == NULL) {
-        fprintf(stderr, "Vulkanthyst: shim symbol missing: %s\\n", dlerror());
+        fprintf(stderr, "Vulkanthyst: shim symbol missing: %s\n", dlerror());
         dlclose(handle);
         return NULL;
     }
-    fprintf(stderr, "Vulkanthyst: shared Vulkan loader handle=%p, GIPA=%p\\n", handle, gipa);
+    fprintf(stderr, "Vulkanthyst: shared Vulkan loader handle=%p, GIPA=%p\n", handle, gipa);
     return handle;
 }
