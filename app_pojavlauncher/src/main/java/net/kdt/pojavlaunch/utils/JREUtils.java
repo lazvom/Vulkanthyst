@@ -299,6 +299,10 @@ public class JREUtils {
         envMap.put("DALVIK_APPLICATION", Tools.jObjectToString(activity.getApplication()));
         envMap.put("DALVIK_JAVAVM", String.valueOf(Tools.getJavaVMPointer()));
 
+        // Route SDL3 through the same Vulkan loader entry point used by LWJGL.
+        // User custom_env.txt remains able to override this value below.
+        envMap.put("SDL_VULKAN_LIBRARY", NATIVE_LIB_DIR + "/libpojavexec.so");
+
         readCustomEnv(envMap); // Must be last so it overrides anything the user sets for obvious reasons.
 
         for (Map.Entry<String, String> env : envMap.entrySet()) {
