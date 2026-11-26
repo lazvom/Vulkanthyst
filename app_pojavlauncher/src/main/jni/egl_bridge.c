@@ -1,3 +1,4 @@
+extern void *pojav_get_vulkan_shim_handle(void);
 #include <jni.h>
 #include <assert.h>
 #include <dlfcn.h>
@@ -252,7 +253,7 @@ void* maybe_load_vulkan() {
 EXTERNAL_API JNIEXPORT jlong JNICALL
 Java_org_lwjgl_vulkan_VK_getVulkanDriverHandle(ABI_COMPAT JNIEnv *env, ABI_COMPAT jclass thiz) {
     printf("EGLBridge: LWJGL-side Vulkan loader requested the Vulkan handle\n");
-    return (jlong) maybe_load_vulkan();
+    return (jlong) (uintptr_t) pojav_get_vulkan_shim_handle();
 }
 
 EXTERNAL_API void pojavSwapInterval(int interval) {
