@@ -27,6 +27,7 @@ LOCAL_SHARED_LIBRARIES := androidnsbypass
 LOCAL_SRC_FILES := \
     bigcoreaffinity.c \
     egl_bridge.c \
+    vulkan_loader_shim.c \
     ctxbridges/loader_dlopen.c \
     ctxbridges/gl_bridge.c \
     ctxbridges/osm_bridge.c \
